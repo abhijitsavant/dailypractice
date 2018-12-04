@@ -1,9 +1,12 @@
 package com.jersey.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author ABHIJIT
  *
  */
+@XmlRootElement
 public class Message {
 	private int id;
 	private String content;
