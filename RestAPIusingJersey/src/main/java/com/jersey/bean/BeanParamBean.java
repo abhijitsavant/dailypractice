@@ -4,7 +4,7 @@ import javax.ws.rs.CookieParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.MatrixParam;
 
-public class BeanParamBean {
+public class BeanParamBean { 
 	private @MatrixParam(value = "matrixParam") String matrixParam;
 	private @HeaderParam("Accept") String headerParam; 
 	private @CookieParam("Cookie_1")String cookieParam;
