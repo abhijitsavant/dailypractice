@@ -12,6 +12,13 @@ public class Message {
 	private String content;
 	public Message() {
 	}
+	
+	public Message(int id, String content) {
+		super();
+		this.id = id;
+		this.content = content;
+	}
+
 	public int getId() {
 		return id;
 	}
