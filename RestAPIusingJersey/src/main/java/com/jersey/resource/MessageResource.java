@@ -3,17 +3,25 @@ package com.jersey.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
+import com.jersey.bean.BeanParamBean;
 import com.jersey.bean.Message;
 import com.jersey.service.MessageService;
 
@@ -67,5 +75,29 @@ public class MessageResource {
 			}
 		}
 		return filteredMessages;
+	}
+	
+	@GET
+	@Path("matrix")
+	@Produces(MediaType.TEXT_PLAIN)
+	//pass param like query param seperated by ;
+	public String testMatrixParam(@MatrixParam(value = "matrixParam") String matrixParam,@HeaderParam("Accept") String headerParam, @CookieParam("Cookie_1")String cookieParam) {
+		return "This is matrix param : "+matrixParam+" Header Param: "+headerParam+" cookieParam : "+cookieParam;
+	}
+
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("context")
+	public String testContext(@Context UriInfo info,@Context HttpHeaders headers) {
+		return info.getAbsolutePath().toString()+" "+headers.getCookies();
+		
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("beanparam")
+	public String testBeanParam(@BeanParam BeanParamBean bean) {
+		return bean.getCookieParam() +" "+ bean.getHeaderParam()+" "+bean.getMatrixParam();
+		
 	}
 }
