@@ -3,6 +3,7 @@ package com.jersey.service;
 import java.util.Map;
 
 import com.jersey.bean.Message;
+import com.jersey.exception.GenericException;
 import com.jersey.util.MessageUtils;
 
 public class MessageService {
@@ -11,7 +12,11 @@ public class MessageService {
 	}
 
 	public Message getMessage(int id) {
-		return MessageUtils.getMessage(id);
+		Message message = MessageUtils.getMessage(id);
+		if (message==null) {
+			throw new GenericException("Not Found");
+		}
+		return message;
 	}
 
 	public Message createMessage(Message message) {

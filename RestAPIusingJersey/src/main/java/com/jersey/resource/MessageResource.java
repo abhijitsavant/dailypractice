@@ -1,5 +1,6 @@
 package com.jersey.resource;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.jersey.bean.BeanParamBean;
@@ -29,12 +32,13 @@ import com.jersey.service.MessageService;
 public class MessageResource {
 	MessageService messageService = new MessageService();
 
-	/*
-	 * @GET
-	 * 
-	 * @Produces(MediaType.APPLICATION_XML) public List<Message> getMessages() {
-	 * return new ArrayList<>(messageService.getMessages().values()); }
-	 */
+	
+	 @GET
+	 @Produces(MediaType.APPLICATION_XML) 
+	 public List<Message> getMessages() {
+		 return new ArrayList<>(messageService.getMessages().values()); 
+	 }
+	 
 	@GET
 	@Path("/{messageId}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,8 +57,12 @@ public class MessageResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	public Message createMessage(Message message) {
-		return messageService.createMessage(message);
+	public Response createMessage(Message message, @Context UriInfo uriInfo) {
+		Message messageCreated = messageService.createMessage(message);
+		URI uri = uriInfo.getAbsolutePathBuilder().path(messageCreated.getId()+"").build();
+		return Response.created(uri)
+				.entity(messageCreated)
+				.build();
 	}
 
 	@DELETE
@@ -65,6 +73,7 @@ public class MessageResource {
 	}
 
 	@GET
+	@Path("filter")
 	@Produces(MediaType.APPLICATION_XML)
 	public List<Message> getMessagesUsingQueryString(@QueryParam(value = "filter") String condition) {
 		List<Message> filteredMessages = new ArrayList<>();
@@ -99,5 +108,12 @@ public class MessageResource {
 	public String testBeanParam(@BeanParam BeanParamBean bean) {
 		return bean.getCookieParam() +" "+ bean.getHeaderParam()+" "+bean.getMatrixParam();
 		
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("responsecode")
+	public Response testSendResponse(@BeanParam BeanParamBean bean) {
+		return Response.status(Status.CREATED).build();
 	}
 }
