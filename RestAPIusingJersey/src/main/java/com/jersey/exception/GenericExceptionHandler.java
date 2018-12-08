@@ -6,7 +6,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import com.jersey.bean.ExceptionBean;
-@Provider
+//@Provider
 public class GenericExceptionHandler implements ExceptionMapper<Throwable>{
 
 	@Override
